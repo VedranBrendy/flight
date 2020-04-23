@@ -1,100 +1,100 @@
+/* Flash msg */
+/* flash remove -> x */
+$(document).ready(function () {
+  $('.remove').click(function () {
+    $('.flash').hide();
+  });
+
+  setTimeout(function () {
+    $('.flash').fadeOut('slow');
+  }, 3000);
+});
+
 /* Define UI */
 const form = document.querySelector('form');
-const polaziste = document.getElementById('polaziste');
-const odrediste = document.getElementById('odrediste');
+const departure = document.getElementById('departure');
+const arrival = document.getElementById('arrival');
 
 /* Datepicker */
 const datepicker = document.getElementById('datepicker');
 const datepicker2 = document.getElementById('datepicker2');
 
-/* Radio buttons */
-const povratna = document.getElementById('customRadio1');
-const jednosmjerna = document.getElementById('customRadio2');
-const viseDestinacija = document.getElementById('customRadio3');
 
-const radio = document.getElementsByName('customRadio');
-
-
-
-povratna.addEventListener("click", (e) => {
-  document.getElementById("datepicker2").style.visibility = "visible";
+document.getElementById('customRadio1').addEventListener("click", (e) => {
+  document.getElementById("datepickerArrival").style.visibility = "visible";
+  document.getElementById("multipleDestinations").style.visibility = "hidden";
 });
 
-jednosmjerna.addEventListener("click", (e) => {
+document.getElementById('customRadio2').addEventListener("click", (e) => {
 
-  if (e.target.value === 'jednosmjerna') {
-    const jednosmjernaValue = e.target.value;
-    document.getElementById("datepicker2").style.visibility = "hidden";
+  if (e.target.value === 'oneWay') {
+    const oneWayValue = e.target.value;
+    document.getElementById("datepickerArrival").style.visibility = "hidden";
+    document.getElementById("collapse show").classList.remove('show');
 
   }
 
 });
-viseDestinacija.addEventListener("click", (e) => {
-  document.getElementById("datepicker2").style.visibility = "visible";
-
+document.getElementById('customRadio3').addEventListener("click", (e) => {
+  document.getElementById("multipleDestinations").style.visibility = "visible";
 });
 
 
 
-polaziste.addEventListener('keyup', polazak);
-odrediste.addEventListener('keyup', polazak);
+departure.addEventListener('keyup', goOff);
+arrival.addEventListener('keyup', goOff);
 
-polazisteCollapse.addEventListener('keyup', polazak);
-odredisteCollapse.addEventListener('keyup', polazak);
-polazisteCollapse2.addEventListener('keyup', polazak);
-odredisteCollapse2.addEventListener('keyup', polazak);
+departureCollapse.addEventListener('keyup', goOff);
+arrivalCollapse.addEventListener('keyup', goOff);
+departureCollapse2.addEventListener('keyup', goOff);
+arrivalCollapse2.addEventListener('keyup', goOff);
 
 
 
-function polazak(e) {
+function goOff(e) {
 
   let search = e.target.value;
   let apikey = 'a5cJ4bxftrJWSGGblfV4DViVbOumK3';
 
-  if (search.length >= 3) {
+  let xhr = new XMLHttpRequest();
 
-    let xhr = new XMLHttpRequest();
+  xhr.open('GET', `https://api.loocpi.com/v1/locations?key=${apikey}&autocomplete=${search}`, true);
+  xhr.onload = function () {
+    //If response successful -alert success
+    if (xhr.readyState == 4 && xhr.status == 200) {
 
-    xhr.open('GET', `https://api.loocpi.com/v1/locations?key=${apikey}&autocomplete=${search}`, true);
-    xhr.onload = function () {
-      //If response successful -alert success
-      if (xhr.readyState == 4 && xhr.status == 200) {
+      var suggestion = JSON.parse(this.responseText);
+      var ar = Object.entries(suggestion);
 
-        var suggestion = JSON.parse(this.responseText);
+      var newArr = [];
 
-        /*  console.log(Object.entries(suggestion));
-  */
-        var ar = Object.entries(suggestion);
+      for (var i = 0, len = ar.length; i < len; i++) {
+        // inner loop applies to sub-arrays
+        for (var j = 0, len2 = ar[i].length; j < len2; j++) {
+          // accesses each element of each sub-array in turn
 
-        var newArr = [];
+          if (ar[i][j].name != undefined) {
+            newArr.push(ar[i][j].name);
 
-        for (var i = 0, len = ar.length; i < len; i++) {
-          // inner loop applies to sub-arrays
-          for (var j = 0, len2 = ar[i].length; j < len2; j++) {
-            // accesses each element of each sub-array in turn
+            autocomplete(departure, newArr);
+            autocomplete(arrival, newArr);
 
-            if (ar[i][j].name != undefined) {
-              newArr.push(ar[i][j].name);
+            autocomplete(departureCollapse, newArr);
+            autocomplete(arrivalCollapse, newArr);
+            autocomplete(departureCollapse2, newArr);
+            autocomplete(arrivalCollapse2, newArr);
 
-              autocomplete(polaziste, newArr);
-              autocomplete(odrediste, newArr);
-
-              autocomplete(polazisteCollapse, newArr);
-              autocomplete(odredisteCollapse, newArr);
-              autocomplete(polazisteCollapse2, newArr);
-              autocomplete(odredisteCollapse2, newArr);
-
-            }
           }
         }
-
-
       }
 
+
     }
-    xhr.send();
 
   }
+  xhr.send();
+
+
 
 }
 

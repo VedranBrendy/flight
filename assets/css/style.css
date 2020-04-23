@@ -28,6 +28,7 @@ input[type="submit"] {
   color: #fff;
 }
 .autocomplete-items {
+  width: 90%;
   position: absolute;
   border: 1px solid #d4d4d4;
   border-bottom: none;
@@ -35,7 +36,7 @@ input[type="submit"] {
   z-index: 99;
   /*position the autocomplete items to be the same width as the container:*/
   top: 100%;
-  left: 0;
+  left: 15px;
   right: 0;
 }
 .autocomplete-items div {
@@ -52,4 +53,74 @@ input[type="submit"] {
   /*when navigating through the items using the arrow keys:*/
   background-color: DodgerBlue !important;
   color: #ffffff;
+}
+
+:root {
+  --color-success: #28b485;
+  --color-white: #fff;
+  --color-black: #000;
+  --color-secondary: #95a5a6;
+  --color-danger: #cd5c5c;
+  --color-warning: #e67e22;
+  --color-info: #3498db;
+}
+
+/* === Flash Messages === */
+.flash {
+  position: fixed;
+  top: 12%;
+  right: 2%;
+  width: 20rem;
+  height: auto;
+  background-color: var(--color-white);
+  padding: 1.5rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  border-radius: 3px;
+}
+.success-flash {
+  background-color: var(--color-success);
+  color: var(--color-white);
+}
+
+.warning-flash {
+  background-color: var(--color-warning);
+  color: var(--color-white);
+}
+
+.info-flash {
+  background-color: var(--color-info);
+  color: var(--color-white);
+}
+
+.error-flash {
+  background-color: var(--color-danger);
+  color: var(--color-white);
+}
+.secondary-flash {
+  background-color: var(--color-secondary);
+  color: var(--color-black);
+}
+
+.flash-heading {
+  font-size: 1.3rem;
+  font-weight: 300;
+}
+
+.flash-body p {
+  margin-top: 0.5rem;
+  margin-left: 4rem;
+  font-size: 1.2rem;
+}
+.remove {
+  position: absolute;
+  top: 0.1rem;
+  right: 1rem;
+  font-size: 1.9rem;
+  color: var(--color-white);
+  font-weight: 500;
+}
+
+.remove:hover {
+  cursor: pointer;
 }
